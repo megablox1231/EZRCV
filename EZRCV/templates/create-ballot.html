@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+{% extends 'base.html' %}
+
+<html lang="en">
+<head>
+    <title>Title</title>
+</head>
+<body>
+    {% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-2">
+                <p class="title-h1">EZ-RCV</p>
+            </div>
+        </div>
+        <form method="post" id="ballotForm">
+            <div class="ballot-opts-div">
+                <div class="row">
+                    <label for="inputName" class="col-auto col-form-label-lg" style="color: var(--cream)">Ballot Name</label>
+                    <div class="col-auto">
+                        <input type="text" class="form-control" id="inputName" name="name" style="background-color: var(--cream); border: 0; color: var(--brown);" required>
+                    </div>
+                </div>
+            </div>
+            <!-- Ballot Entries Title and Buttons -->
+            <div class="mb-5" style="margin-top: 1rem">
+                <div class="entries-title-div">
+                    <h2 class="entries-title-h2">Ballot Entries</h2>
+                </div>
+                <button type="button" class="btn-add" onclick="newEntry()">
+                    <h2 class="btn-h1">Add Entry</h2>
+                </button>
+                <button type="submit" class="btn-add">
+                    <h2 class="btn-h1">Submit</h2>
+                </button>
+            </div>
+            <!-- Template Ballot Entry -->
+            <div class="row g-3 mt-3 ms-5 ballot-entry" style="clear: both; display: none;">
+                <div class="col-auto">
+                    <label for="inputPassword2" class="visually-hidden">Entry Name</label>
+                    <input type="text" class="form-control" id="inputPassword2" placeholder="Entry Name">
+                </div>
+                <div class="col-auto">
+                    <button type="button" class="btn-delete bi bi-x-circle" onclick="deleteEntry(this)" aria-label="Delete"></button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script src="/static/scripts/ballotEntryManager.js"></script>
+    {% endblock %}
+</body>
+</html>

@@ -1,0 +1,116 @@
+:root {
+    /* Palette */
+    --brown: #72231c;
+    --cream: #faf0d7;
+    --orange: #eaa44f;
+    --red: #cd3333;
+}
+
+html {
+    height:100%;
+}
+
+body {
+    margin: 0 0 0 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--cream) !important;
+}
+
+.content {
+  flex: 1 0 auto;
+}
+
+#topTri {
+    width: 100%;
+    height: 5%;
+    position: absolute;
+}
+
+#bottomTri {
+    height: 100%;
+    width: 100%;
+    bottom: 0;
+    position: relative;
+}
+
+.footer {
+  flex-shrink: 0;
+}
+
+.title-h1 {
+    color: var(--brown);
+    font-weight: bold;
+    text-align: center;
+    font-size: 3rem;
+}
+
+.btn-main {
+  width: 27rem;
+  height: 10rem;
+  padding: 0;
+  border: 0;
+  background: url("/static/images/primary-button.svg");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+button:hover {
+    filter: brightness(75%);
+}
+
+.btn-h1 {
+    color: var(--cream);
+    padding-right: 0.4rem;
+}
+
+.ballot-opts-div {
+    display: inline-block;
+    padding: 5rem;
+    background: url("/static/images/primary-button.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+.entries-title-div {
+    float: left;
+    width: fit-content;
+    padding: 3rem 4rem 3rem 4rem;
+    margin-left: -12px;
+    background: url("/static/images/side-button.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+.entries-title-h2 {
+    color: var(--cream);
+}
+
+.btn-add {
+    margin-top: 3rem;
+    margin-left: 2rem;
+    padding: 1rem 1rem 1rem 1rem;
+    border: 0;
+    background: url("/static/images/primary-button.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+.ballot-entry {
+    padding: 1rem 1rem 1.5rem 1rem;
+    width: fit-content;
+    background: url("/static/images/ballot-entry.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+.btn-delete {
+    border: 0;
+    background: none;
+    font-size: x-large;
+}
+
+.btn-delete:hover {
+    color: var(--red);
+}

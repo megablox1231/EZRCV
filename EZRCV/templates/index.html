@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+{% extends 'base.html' %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-2">
+                <p class="title-h1">EZ-RCV</p>
+            </div>
+        </div>
+        <div class="col text-center">
+            <div class="btn-group-vertical gap-5">
+                <a href="{{ url_for('home.create_ballot') }}">
+                    <button class="btn-main">
+                        <h1 class="btn-h1">Create Ballot</h1>
+                    </button>
+                </a>
+                <button class="btn-main">
+                    <h1 class="btn-h1">Vote</h1>
+                </button>
+                <button class="btn-main">
+                    <h1 class="btn-h1">Manage Ballot</h1>
+                </button>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+</body>
+</html>
