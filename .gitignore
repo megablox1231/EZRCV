@@ -130,3 +130,5 @@ build/
 *.egg-info/
 
 .venv
+
+/EZRCV/config.py

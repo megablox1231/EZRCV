@@ -1,6 +1,17 @@
 import os
-
+import sqlalchemy
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import DeclarativeBase
+# from flask_migrate import Migrate
+
+
+class Base(DeclarativeBase):
+    pass
+
+
+db = SQLAlchemy(model_class=Base)
+# migrate = Migrate()
 
 
 def create_app(test_config=None):
@@ -10,20 +21,21 @@ def create_app(test_config=None):
         # load the instance config when not testing
         app.config.from_pyfile('config.py', silent=False)
 
-        # app.config['SQLALCHEMY_DATABASE_URI'] = sqlalchemy.URL.create(
-        #     'mysql+mysqldb',
-        #     username=app.config['USER'],
-        #     password=app.config['PASSWORD'],
-        #     host=app.config['HOST'],
-        #     port=app.config['PORT'],
-        #     database=app.config['DB_NAME']
-        # )
+        app.config['SQLALCHEMY_DATABASE_URI'] = sqlalchemy.URL.create(
+            'mysql+mysqldb',
+            username=app.config['USER'],
+            password=app.config['PASSWORD'],
+            host=app.config['HOST'],
+            port=app.config['PORT'],
+            database=app.config['DB_NAME']
+        )
     else:
         # load the test config if passed in
         app.config.update(test_config)
 
     # init database extension
-    # db.init_app(app)
+    db.init_app(app)
+    # migrate.init_app(app, db)
 
     # ensure the instance folder exists
     try:

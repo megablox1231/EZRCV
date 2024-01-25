@@ -4,6 +4,7 @@ var parent = document.getElementById("ballotForm");
 function newEntry() {
     let entry = origEntry.cloneNode(true);
     entry.style.display = "flex";
+    entry.getElementsByTagName("input")[0].name = "entries"
     parent.insertBefore(entry, origEntry);
 }
 
