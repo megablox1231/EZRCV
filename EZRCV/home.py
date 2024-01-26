@@ -32,6 +32,6 @@ def create_ballot():
     return render_template('create-ballot.html')
 
 
-@bp.route('/<int:ballot_id>/vote', methods=('GET', 'POST'))
-def vote(ballot_id):
+@bp.route('/vote', methods=('GET', 'POST'))
+def vote():
     return render_template('vote.html')

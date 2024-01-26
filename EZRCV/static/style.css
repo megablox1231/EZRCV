@@ -131,3 +131,47 @@ button:hover {
 .btn-delete:hover {
     color: var(--red);
 }
+
+/* Vote.html */
+
+.sortable-list {
+    width: 27rem;
+    background: none;
+}
+
+.sortable-list .item {
+    list-style: none;
+    display: flex;
+    cursor: move;
+    align-items: center;
+    border-radius: 5px;
+    padding: 1.5rem 1rem;
+    margin-bottom: 11px;
+    /* box-shadow: 0 2px 4px rgba(0,0,0,0.06); */
+    justify-content: space-between;
+    background: url("/static/images/ballot-entry.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+.item .details {
+  display: flex;
+  align-items: center;
+}
+
+.item .details span {
+  color: var(--cream);
+  font-size: 1.13rem;
+}
+.item i {
+  color: var(--red);
+  font-size: 2rem;
+}
+
+.item.dragging {
+  opacity: 0.6;
+}
+
+.item.dragging :where(.details, i) {
+  opacity: 0;
+}

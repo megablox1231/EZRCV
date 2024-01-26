@@ -1,10 +1,60 @@
 <!DOCTYPE html>
-<html lang="en">
+
+{% extends 'base.html' %}
+
+<!-- Coding By CodingNepal - youtube.com/codingnepal -->
+<html lang="en" dir="ltr">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    {% block head %}
+    <title>Drag and Drop Sortable List | CodingNepal</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+    <script src="/static/scripts/vote.js" defer></script>
+    {% endblock%}
 </head>
 <body>
-
+{% block content %}
+<div style="justify-content: center; display: flex;">
+    <ul class="sortable-list mt-5">
+        <li class="item" draggable="true">
+            <div class="details">
+                <span>Kristina Zasiadko</span>
+            </div>
+            <i class="uil uil-draggabledots"></i>
+        </li>
+        <li class="item" draggable="true">
+            <div class="details">
+                <span>Gabriel Wilson</span>
+            </div>
+            <i class="uil uil-draggabledots"></i>
+        </li>
+        <li class="item" draggable="true">
+            <div class="details">
+                <span>Ronelle Cesicon</span>
+            </div>
+            <i class="uil uil-draggabledots"></i>
+        </li>
+        <li class="item" draggable="true">
+            <div class="details">
+                <span>James Khosravi</span>
+            </div>
+            <i class="uil uil-draggabledots"></i>
+        </li>
+        <li class="item" draggable="true">
+            <div class="details">
+                <span>Annika Hayden</span>
+            </div>
+            <i class="uil uil-draggabledots"></i>
+        </li>
+        <li class="item" draggable="true">
+            <div class="details">
+                <span>Donald Horton</span>
+            </div>
+            <i class="uil uil-draggabledots"></i>
+        </li>
+    </ul>
+</div>
+{% endblock %}
 </body>
 </html>
