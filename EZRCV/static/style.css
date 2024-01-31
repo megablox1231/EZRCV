@@ -48,7 +48,7 @@ body {
 }
 
 .btn-main {
-  width: 27rem;
+  width: 29rem;
   height: 10rem;
   padding: 0;
   border: 0;
@@ -58,7 +58,7 @@ body {
 }
 
 .option-main {
-    width: 27rem;
+    width: 29rem;
     height: 10rem;
     border: 0;
     background: url("/static/images/primary-button.svg");
@@ -133,6 +133,16 @@ button:hover {
 }
 
 /* Vote.html */
+
+.btn-vote-submit {
+    margin-left: 7rem;
+    padding: 0.8rem 2rem;
+    border: none;
+    border-radius: 1rem;
+    background-color: var(--orange);
+    color: var(--brown);
+    font-size: x-large;
+}
 
 .sortable-list {
     width: 27rem;

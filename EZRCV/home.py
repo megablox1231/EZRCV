@@ -3,13 +3,19 @@ from flask import (
 )
 from EZRCV import db
 import sqlalchemy as sa
-from EZRCV.models import Ballot, Entry
+from EZRCV.models import Ballot, Entry, Voter
 
 bp = Blueprint('home', __name__)
 
 
-@bp.route('/')
+@bp.route('/', methods=('GET', 'POST'))
 def index():
+    if request.method == 'POST':
+        if 'vote' in request.form:
+            return redirect(url_for('home.vote', ballot_id=request.form['voteCode']))
+        elif 'results' in request.form:
+            pass
+
     return render_template('index.html')
 
 
@@ -32,6 +38,14 @@ def create_ballot():
     return render_template('create-ballot.html')
 
 
-@bp.route('/vote', methods=('GET', 'POST'))
-def vote():
-    return render_template('vote.html')
+@bp.route('/<int:ballot_id>/vote', methods=('GET', 'POST'))
+def vote(ballot_id):
+    if request.method == "POST":
+        entry_ids = request.form.getlist('entry_ids')
+        rankings = " ".join(ballot_id for ballot_id in entry_ids)
+        db.session.add(Voter(ballot_id=ballot_id, vote=rankings))
+        db.session.commit()
+
+    entries = db.session.execute(sa.select(Entry).where(Entry.ballot_id == ballot_id))
+    ballot_info = db.session.scalar(sa.select(Ballot).where(Ballot.id == ballot_id))
+    return render_template('vote.html', entries=entries, ballot=ballot_info)

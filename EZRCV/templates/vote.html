@@ -11,50 +11,66 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
     <script src="/static/scripts/vote.js" defer></script>
-    {% endblock%}
+    {% endblock %}
 </head>
 <body>
 {% block content %}
-<div style="justify-content: center; display: flex;">
-    <ul class="sortable-list mt-5">
-        <li class="item" draggable="true">
-            <div class="details">
-                <span>Kristina Zasiadko</span>
-            </div>
-            <i class="uil uil-draggabledots"></i>
-        </li>
-        <li class="item" draggable="true">
-            <div class="details">
-                <span>Gabriel Wilson</span>
-            </div>
-            <i class="uil uil-draggabledots"></i>
-        </li>
-        <li class="item" draggable="true">
-            <div class="details">
-                <span>Ronelle Cesicon</span>
-            </div>
-            <i class="uil uil-draggabledots"></i>
-        </li>
-        <li class="item" draggable="true">
-            <div class="details">
-                <span>James Khosravi</span>
-            </div>
-            <i class="uil uil-draggabledots"></i>
-        </li>
-        <li class="item" draggable="true">
-            <div class="details">
-                <span>Annika Hayden</span>
-            </div>
-            <i class="uil uil-draggabledots"></i>
-        </li>
-        <li class="item" draggable="true">
-            <div class="details">
-                <span>Donald Horton</span>
-            </div>
-            <i class="uil uil-draggabledots"></i>
-        </li>
-    </ul>
-</div>
+<h1 class="mt-5" style="margin-left: 7rem; color: var(--brown); font-weight: bold;">{{ ballot.name }}</h1>
+<form method="post">
+    <button class="btn-vote-submit mt-4" type="submit">Submit</button>
+    <div style="justify-content: center; display: flex;">
+        <ul class="sortable-list mt-1">
+            {% for entry in entries %}
+            <li class="item" draggable="true">
+                <div class="details">
+                    <span>{{ entry.Entry.name }}</span>
+                </div>
+                <i class="uil uil-draggabledots"></i>
+                <label class="visually-hidden">
+                    <input type="text" name="entry_ids" value="{{ entry.Entry.id }}" style="display: none;">
+                </label>
+            </li>
+            {% endfor %}
+
+            <li class="item" draggable="true">
+                <div class="details">
+                    <span>Kristina Zasiadko</span>
+                </div>
+                <i class="uil uil-draggabledots"></i>
+            </li>
+            <li class="item" draggable="true">
+                <div class="details">
+                    <span>Gabriel Wilson</span>
+                </div>
+                <i class="uil uil-draggabledots"></i>
+            </li>
+            <li class="item" draggable="true">
+                <div class="details">
+                    <span>Ronelle Cesicon</span>
+                </div>
+                <i class="uil uil-draggabledots"></i>
+            </li>
+            <li class="item" draggable="true">
+                <div class="details">
+                    <span>James Khosravi</span>
+                </div>
+                <i class="uil uil-draggabledots"></i>
+            </li>
+            <li class="item" draggable="true">
+                <div class="details">
+                    <span>Annika Hayden</span>
+                </div>
+                <i class="uil uil-draggabledots"></i>
+            </li>
+            <li class="item" draggable="true">
+                <div class="details">
+                    <span>Donald Horton</span>
+                </div>
+                <i class="uil uil-draggabledots"></i>
+            </li>
+        </ul>
+    </div>
+</form>
 {% endblock %}
 </body>
 </html>

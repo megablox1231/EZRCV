@@ -8,6 +8,7 @@ class Ballot(db.Model):
     name: so.Mapped[str] = so.mapped_column(sa.String(64))
 
     entries: so.WriteOnlyMapped['Entry'] = so.relationship(back_populates='ballot')
+    votes: so.WriteOnlyMapped['Voter'] = so.relationship(back_populates='ballot')
 
     def __repr__(self):
         return '<Ballot {}: Name({})>'.format(self.id, self.name)
@@ -23,3 +24,14 @@ class Entry(db.Model):
 
     def __repr__(self):
         return '<Entry {}: Name({}), votes({})'.format(self.id, self.name, self.votes)
+
+
+class Voter(db.Model):
+    id: so.Mapped[int] = so.mapped_column(primary_key=True)
+    ballot_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(Ballot.id))
+    vote: so.Mapped[str] = so.mapped_column(sa.TEXT(65000))
+
+    ballot: so.Mapped[Ballot] = so.relationship(back_populates='votes')
+
+    def __repr__(self):
+        return '<Vote {}: ' + self.vote
