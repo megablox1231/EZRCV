@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+
+{% extends 'base.html' %}
+
+<html lang="en">
+<head>
+    {% block head %}
+    <title>Results</title>
+    {% endblock %}
+</head>
+<body>
+{% block content %}
+<div class="container-fluid">
+    <p class="mt-5 text-center" style="font-size: 4rem; color: var(--brown); text-decoration: underline;">Winner</p>
+    <p class="text-center" style="font-size: 3rem; color: var(--orange);">{{ result }}</p>
+</div>
+{% endblock %}
+</body>
+</html>
