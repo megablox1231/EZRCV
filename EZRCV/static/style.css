@@ -82,6 +82,8 @@ button:hover {
     padding-right: 0.4rem;
 }
 
+/* create-ballot.html */
+
 .ballot-opts-div {
     display: inline-block;
     padding: 5rem;
@@ -132,7 +134,7 @@ button:hover {
     color: var(--red);
 }
 
-/* Vote.html */
+/* vote.html */
 
 .btn-vote-submit {
     margin-left: 7rem;
@@ -165,23 +167,34 @@ button:hover {
 }
 
 .item .details {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 }
 
 .item .details span {
-  color: var(--cream);
-  font-size: 1.13rem;
+    color: var(--cream);
+    font-size: 1.13rem;
 }
 .item i {
-  color: var(--red);
-  font-size: 2rem;
+    color: var(--red);
+    font-size: 2rem;
 }
 
 .item.dragging {
-  opacity: 0.6;
+    opacity: 0.6;
 }
 
 .item.dragging :where(.details, i) {
-  opacity: 0;
+    opacity: 0;
+}
+
+/* vote-success.html */
+
+.div-vote-success {
+    width: 50rem;
+    height: 20rem;
+    padding: 3rem 0 0 0;
+    background: url("/static/images/primary-button.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
 }

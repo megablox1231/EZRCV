@@ -34,10 +34,15 @@ def create_ballot():
             db.session.add(Entry(ballot_id=ballot.id, name=entry))
         db.session.commit()
 
-        return render_template('index.html')
-        # TODO: return render template that gives voting url
+        return redirect(url_for('home.ballot_success.html', ballot_id=ballot.id))
 
     return render_template('create-ballot.html')
+
+
+@bp.route('/<int:ballot_id>/ballot_success')
+def create_ballot_success(ballot_id):
+    vote_link = request.url_root + f'{ballot_id}/vote'
+    return render_template('ballot-success.html', link=vote_link, code=ballot_id)
 
 
 @bp.route('/<int:ballot_id>/vote', methods=('GET', 'POST'))
@@ -48,12 +53,18 @@ def vote(ballot_id):
         db.session.add(Voter(ballot_id=ballot_id, vote=rankings))
         db.session.commit()
 
-        return render_template('index.html')
+        return redirect(url_for('home.vote_success', ballot_id=ballot_id))
 
     entries = db.session.execute(sa.select(Entry).where(Entry.ballot_id == ballot_id))
     ballot_info = db.session.scalar(sa.select(Ballot).where(Ballot.id == ballot_id))
 
     return render_template('vote.html', entries=entries, ballot=ballot_info)
+
+
+@bp.route('/<int:ballot_id>/vote_success')
+def vote_success(ballot_id):
+    results_link = request.url_root + f'{ballot_id}/results'
+    return render_template('vote-success.html', link=results_link, code=ballot_id)
 
 
 @bp.route('/<int:ballot_id>/results')
@@ -93,7 +104,8 @@ def results(ballot_id):
                 print('its a tie')
                 result_list = db.session.scalars(
                     sa.select(Entry.name).where(Entry.id.in_(
-                        itertools.islice(cand_results, len(cand_results) - elim_count, len(cand_results)))))
+                        [cand[0] for cand in
+                         itertools.islice(cand_results, len(cand_results) - elim_count, len(cand_results))])))
                 result = ", ".join(result_list)
                 break
             else:
