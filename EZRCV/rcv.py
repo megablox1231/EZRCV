@@ -7,16 +7,16 @@ from EZRCV.models import Ballot, Entry, Voter
 from collections import deque
 import itertools
 
-bp = Blueprint('home', __name__)
+bp = Blueprint('rcv', __name__)
 
 
 @bp.route('/', methods=('GET', 'POST'))
 def index():
     if request.method == 'POST':
         if 'vote' in request.form:
-            return redirect(url_for('home.vote', ballot_id=request.form['voteCode']))
+            return redirect(url_for('rcv.vote', ballot_id=request.form['voteCode']))
         elif 'results' in request.form:
-            return redirect(url_for('home.results', ballot_id=request.form['resultsCode']))
+            return redirect(url_for('rcv.results', ballot_id=request.form['resultsCode']))
 
     return render_template('index.html')
 
@@ -34,7 +34,7 @@ def create_ballot():
             db.session.add(Entry(ballot_id=ballot.id, name=entry))
         db.session.commit()
 
-        return redirect(url_for('home.ballot_success.html', ballot_id=ballot.id))
+        return redirect(url_for('rcv.create_ballot_success', ballot_id=ballot.id))
 
     return render_template('create-ballot.html')
 
@@ -49,11 +49,11 @@ def create_ballot_success(ballot_id):
 def vote(ballot_id):
     if request.method == "POST":
         entry_ids = request.form.getlist('entry_ids')
-        rankings = " ".join(ballot_id for ballot_id in entry_ids)
+        rankings = " ".join(entry_id for entry_id in entry_ids)
         db.session.add(Voter(ballot_id=ballot_id, vote=rankings))
         db.session.commit()
 
-        return redirect(url_for('home.vote_success', ballot_id=ballot_id))
+        return redirect(url_for('rcv.vote_success', ballot_id=ballot_id))
 
     entries = db.session.execute(sa.select(Entry).where(Entry.ballot_id == ballot_id))
     ballot_info = db.session.scalar(sa.select(Ballot).where(Ballot.id == ballot_id))
@@ -73,6 +73,11 @@ def results(ballot_id):
     # rankings(votes) are stored as a list of deques with most preferred candidates on top
     voters = db.session.scalars(sa.select(Voter).where(Voter.ballot_id == ballot_id))
     rankings = [deque(int(entry) for entry in reversed(voter.vote.split(" "))) for voter in voters]
+
+    if len(rankings) == 0:
+        result = 'No votes have been cast yet'
+        return render_template('results.html', result=result)
+
     win_threshold = len(rankings) / 2
     print(rankings)
     # candidates points are stored as a dictionary of id keys and vote deque array values

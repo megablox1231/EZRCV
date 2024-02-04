@@ -1,10 +1,27 @@
 import pytest
 from EZRCV import create_app, db
+from EZRCV.models import Ballot, Entry, Voter
 
 
 @pytest.fixture
 def app():
     app = create_app('test_config.py')
+
+    with app.app_context():
+        db.create_all()
+
+        db.session.add(Ballot(name='ballot'))
+        db.session.add(Entry(ballot_id=1, name='Ed'))
+        db.session.add(Entry(ballot_id=1, name='Al'))
+        db.session.add(Voter(ballot_id=1, vote='1 2'))
+        db.session.add(Voter(ballot_id=1, vote='2 1'))
+        db.session.add(Voter(ballot_id=1, vote='1 2'))
+
+        db.session.add(Ballot(name='noShow'))
+        db.session.add(Entry(ballot_id=2, name='Ed'))
+        db.session.add(Entry(ballot_id=2, name='Al'))
+
+        db.session.commit()
 
     yield app
 

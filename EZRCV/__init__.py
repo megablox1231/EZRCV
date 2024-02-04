@@ -3,7 +3,6 @@ import sqlalchemy
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase
-# from flask_migrate import Migrate
 
 
 class Base(DeclarativeBase):
@@ -11,7 +10,6 @@ class Base(DeclarativeBase):
 
 
 db = SQLAlchemy(model_class=Base)
-# migrate = Migrate()
 
 
 def create_app(test_config=None):
@@ -36,7 +34,6 @@ def create_app(test_config=None):
 
     # init database extension
     db.init_app(app)
-    # migrate.init_app(app, db)
 
     # ensure the instance folder exists
     try:
@@ -44,8 +41,8 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    from . import home
-    app.register_blueprint(home.bp)
+    from . import rcv
+    app.register_blueprint(rcv.bp)
     app.add_url_rule('/', endpoint='index')
 
     return app
