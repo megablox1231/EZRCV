@@ -19,7 +19,7 @@
         <form method="post" id="ballotForm">
             <div class="ballot-opts-div">
                 <div class="row">
-                    <label for="inputName" class="col-auto col-form-label-lg" style="color: var(--cream)">Ballot Name</label>
+                    <label for="inputName" class="col-auto col-form-label-lg" style="color: var(--cream); font-family: monospace;">Ballot Name</label>
                     <div class="col-auto">
                         <input type="text" class="form-control" id="inputName" name="name" style="background-color: var(--cream); border: 0; color: var(--brown);" required>
                     </div>
@@ -36,6 +36,11 @@
                 <button type="submit" class="btn-add">
                     <h2 class="btn-h1">Submit</h2>
                 </button>
+                <a href="{{ url_for('rcv.index') }}">
+                    <button type="button" class="btn-add">
+                        <h2 class="btn-h1">Home</h2>
+                    </button>
+                </a>
             </div>
             <!-- Template Ballot Entry -->
             <div class="row g-3 mt-3 ms-5 ballot-entry" style="clear: both; display: none;">
