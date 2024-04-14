@@ -11,7 +11,7 @@
 <body>
 {% block content %}
 <div class="container-fluid">
-    <p class="mt-5 text-center" style="font-size: 4rem; color: var(--brown); text-decoration: underline; font-family: monospace;">Winner</p>
+    <p class="mt-5 text-center" style="font-size: 4rem; color: var(--brown); text-decoration: underline; font-family: monospace;">Winner of {{ ballot_opts.name }}</p>
     <p class="text-center" style="font-size: 3rem; color: var(--orange); font-family: monospace;">{{ result }}</p>
     <div class="col text-center">
         <a href="{{ url_for('rcv.index') }}">
@@ -20,6 +20,37 @@
             </button>
         </a>
     </div>
+
+    {% if ballot_opts.display_records %}
+    <div class="accordion mt-2" id="accordionExample">
+        <div class="accordion-item" style="background: none; border:none;">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" style="background: none; font-family:monospace; color:var(--brown); font-size: xx-large;" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                    Ballot Records
+                </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                <div class="accordion-body" id="recordHolder">
+                    {% for record in records %}
+                    <div class="mb-2 bal-record">
+                        <p class="record-voter-name">{{ record.id }}</p>
+                        <div class="record-end"></div>
+                        {%- for candidate in record.vote -%}
+                        <div style="display:inline-flex">
+                            <div class="ballot-record">
+                                <p class="col-2 ms-2" style="font-size:x-large; font-weight: bold; color: var(--orange);">{{ loop.index }}</p>
+                                <span style="font-size:x-large; font-family: monospace; color: var(--brown);">{{ candidate }}</span>
+                            </div>
+                        </div>
+                        {%- endfor -%}
+                        <div class="record-end" style="transform: scaleX(-1);"></div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
 </div>
 {% endblock %}
 </body>

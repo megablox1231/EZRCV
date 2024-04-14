@@ -6,6 +6,7 @@ from EZRCV import db
 class Ballot(db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
     name: so.Mapped[str] = so.mapped_column(sa.String(64))
+    display_records: so.Mapped[bool]
 
     entries: so.WriteOnlyMapped['Entry'] = so.relationship(back_populates='ballot')
     votes: so.WriteOnlyMapped['Voter'] = so.relationship(back_populates='ballot')

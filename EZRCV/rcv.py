@@ -25,9 +25,10 @@ def index():
 def create_ballot():
     if request.method == "POST":
         name = request.form['name']
+        display_records = 'display_records' in request.form
         entries = request.form.getlist('entries')
 
-        ballot = Ballot(name=name)
+        ballot = Ballot(name=name, display_records=display_records)
         db.session.add(ballot)
         db.session.flush()
         for entry in entries:
@@ -69,20 +70,23 @@ def vote_success(ballot_id):
 
 @bp.route('/<int:ballot_id>/results')
 def results(ballot_id):
-    """Returns a winner to the results template using the instant-runoff voting method."""
+    """Returns a winner to the results template using the instant-runoff voting method. Optionally also displays
+    various ballot statistics."""
+    ballot_opts = db.session.scalar(sa.select(Ballot).where(Ballot.id == ballot_id))
+
     # rankings(votes) are stored as a list of deques with most preferred candidates on top
-    voters = db.session.scalars(sa.select(Voter).where(Voter.ballot_id == ballot_id))
+    voters = db.session.scalars(sa.select(Voter).where(Voter.ballot_id == ballot_id)).fetchall()
     rankings = [deque(int(entry) for entry in reversed(voter.vote.split(" "))) for voter in voters]
 
     if len(rankings) == 0:
         result = 'No votes have been cast yet'
-        return render_template('results.html', result=result)
+        return render_template('results.html', result=result, ballot_opts=ballot_opts)
 
     win_threshold = len(rankings) / 2
     print(rankings)
     # candidates points are stored as a dictionary of id keys and vote deque array values
     # points are determined by the length of these arrays
-    cands = db.session.scalars(sa.select(Entry).where(Entry.ballot_id == ballot_id))
+    cands = db.session.scalars(sa.select(Entry).where(Entry.ballot_id == ballot_id)).fetchall()
     cand_pts = {cand.id: [] for cand in cands}
     for ranking in rankings:
         cand_pts[ranking.pop()].append(ranking)
@@ -119,4 +123,11 @@ def results(ballot_id):
                         if ranking[-1] in cand_pts:
                             cand_pts[ranking.pop()].append(ranking)
 
-    return render_template('results.html', result=result)
+    # splitting record votes and replacing with cand names for use in html
+    cand_dict = {}
+    for cand in cands:
+        cand_dict[str(cand.id)] = cand.name
+    for record in voters:
+        record.vote = [cand_dict[cand] for cand in record.vote.split(" ")]
+
+    return render_template('results.html', result=result, records=voters, ballot_opts=ballot_opts)

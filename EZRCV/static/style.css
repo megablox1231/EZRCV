@@ -97,19 +97,36 @@ button:hover {
 /* create-ballot.html */
 
 .ballot-opts-div {
-    display: inline-block;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
     padding: 5rem;
     background: url("/static/images/primary-button.svg");
     background-repeat: no-repeat;
     background-size: 100% 100%;
 }
 
-.entries-title-div {
-    float: left;
-    width: fit-content;
-    padding: 3rem 3rem 3rem 3rem;
-    margin-left: -12px;
+.sidebar-btn {
+    border: 0;
+    right: 0;
+    position: fixed;
+    width: 8.5rem;
+    height: 6rem;
+    font-size: xx-large;
+    font-family: monospace;
+    color: var(--cream);
+    transform: scaleX(-1);
     background: url("/static/images/side-button.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+.entries-title-div {
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 3rem 3rem 3rem 3rem;
+    background: url("/static/images/primary-button.svg");
     background-repeat: no-repeat;
     background-size: 100% 100%;
 }
@@ -119,17 +136,9 @@ button:hover {
     font-family: monospace;
 }
 
-.btn-add {
-    margin-top: 3rem;
-    margin-left: 2rem;
-    padding: 1rem 1rem 1rem 1rem;
-    border: 0;
-    background: url("/static/images/primary-button.svg");
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-}
-
 .ballot-entry {
+    margin-left: auto;
+    margin-right: auto;
     padding: 1rem 1rem 1.5rem 1rem;
     width: fit-content;
     background: url("/static/images/ballot-entry.svg");
@@ -161,7 +170,7 @@ button:hover {
 }
 
 .btn-vote-home {
-    margin-left: 4rem;
+    margin-left: 3rem;
     padding: 0.8rem 2rem;
     border: none;
     border-radius: 1rem;
@@ -201,6 +210,7 @@ button:hover {
     font-family: monospace;
     font-size: 1.2rem;
 }
+
 .item i {
     color: var(--red);
     font-size: 2rem;
@@ -223,4 +233,40 @@ button:hover {
     background: url("/static/images/primary-button.svg");
     background-repeat: no-repeat;
     background-size: 100% 100%;
+}
+
+/* results.html */
+
+.record-end {
+    vertical-align: top;
+    display: inline-flex;
+    width: 2.2807rem;
+    height: 7.5rem;
+    background: url("/static/images/result-ballot-segment-end.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+.ballot-record {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    white-space: wrap;
+    width: 15rem;
+    height: 7.5rem;
+    background: url("/static/images/result-ballot-segment.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+.bal-record {
+    white-space: nowrap;
+    overflow: auto;
+}
+
+.record-voter-name {
+    display: inline-block;
+    width: 4rem;
+    font-family: monospace;
+    color: var(--brown);
 }
