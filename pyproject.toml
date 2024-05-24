@@ -6,6 +6,8 @@ dependencies = [
     "flask",
     "mysqlclient",
     "Flask-SQLAlchemy",
+    "plotly",
+    "pandas"
 ]
 
 [build-system]

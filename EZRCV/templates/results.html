@@ -21,6 +21,23 @@
         </a>
     </div>
 
+    <!-- Vote Total Bar Graph -->
+    <h1>Round by Round Results</h1>
+    {% for plot in json_plots %}
+        <input class="btn-check" type="radio" name="options-base" id="option{{ loop.index }}" autocomplete="off" onclick="select_plot({{plot}})" {{ "checked" if loop.index == 1 }}/>
+        <label class="btn mt-2" for="option{{ loop.index }}">Round {{ loop.index }}</label>
+    {% endfor %}
+    <div id='chart' class='chart mx-lg-5 mt-4'></div>
+
+    <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+    <script type='text/javascript'>
+        function select_plot(plot) {
+            Plotly.newPlot('chart',plot,{});
+        }
+        select_plot({{json_plots[0] | safe}});
+    </script>
+
+    <!-- Ballot Records -->
     {% if ballot_opts.display_records %}
     <div class="accordion mt-2" id="accordionExample">
         <div class="accordion-item" style="background: none; border:none;">

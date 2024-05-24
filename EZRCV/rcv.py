@@ -7,6 +7,11 @@ from EZRCV.models import Ballot, Entry, Voter
 from collections import deque
 import itertools
 
+import pandas as pd
+import plotly.express as px
+import plotly.utils
+import json
+
 bp = Blueprint('rcv', __name__)
 
 
@@ -83,7 +88,7 @@ def results(ballot_id):
         return render_template('results.html', result=result, ballot_opts=ballot_opts)
 
     win_threshold = len(rankings) / 2
-    print(rankings)
+    # print(rankings)
     # candidates points are stored as a dictionary of id keys and vote deque array values
     # points are determined by the length of these arrays
     cands = db.session.scalars(sa.select(Entry).where(Entry.ballot_id == ballot_id)).fetchall()
@@ -91,9 +96,15 @@ def results(ballot_id):
     for ranking in rankings:
         cand_pts[ranking.pop()].append(ranking)
 
+    rounds_df = pd.DataFrame({'Candidate IDs': [cand.id for cand in cands],
+                              'Candidate Name': [cand.name for cand in cands]})
+    round_num = 1
+
     while True:
         cand_results = list(cand_pts.items())
         cand_results.sort(key=lambda tup: len(tup[1]), reverse=True)
+
+        extract_round_data(cand_pts, rounds_df, round_num)
 
         if len(cand_results[0][1]) > win_threshold:
             # the top candidate got more than 50% of the vote
@@ -110,7 +121,7 @@ def results(ballot_id):
 
             if elim_count == len(cand_results):
                 # the remaining candidates have the same number of votes
-                print('its a tie')
+                # print('its a tie')
                 result_list = db.session.scalars(
                     sa.select(Entry.name).where(Entry.id.in_(
                         [cand[0] for cand in
@@ -122,6 +133,7 @@ def results(ballot_id):
                     for ranking in cand_pts.pop(cand[0]):
                         if ranking[-1] in cand_pts:
                             cand_pts[ranking.pop()].append(ranking)
+        round_num += 1
 
     # splitting record votes and replacing with cand names for use in html
     cand_dict = {}
@@ -130,4 +142,25 @@ def results(ballot_id):
     for record in voters:
         record.vote = [cand_dict[cand] for cand in record.vote.split(" ")]
 
-    return render_template('results.html', result=result, records=voters, ballot_opts=ballot_opts)
+    json_plots = plot_rounds(rounds_df, round_num)
+
+    return render_template('results.html',
+                           result=result, records=voters, ballot_opts=ballot_opts, json_plots=json_plots)
+
+
+def extract_round_data(cand_pts, rounds_df, round_num):
+    """Along with candidate name and ID, rounds_df adds a column for each round's first-choice vote totals."""
+    rounds_df['Round ' + str(round_num) + ' First-Choice Votes'] = [len(cand_pts.get(cand_id, []))
+                                                                    for cand_id in rounds_df['Candidate IDs']]
+
+
+def plot_rounds(rounds_df, round_count):
+    json_plots = []
+    max_votes = rounds_df['Round ' + str(round_count) + ' First-Choice Votes'].max()
+    for i in range(1, round_count + 1):
+        fig = px.bar(rounds_df, x='Candidate Name', y='Round ' + str(i) + ' First-Choice Votes')
+        fig = fig.update_layout(yaxis_tickmode='linear', yaxis_range=[0, max_votes])
+
+        json_plots.append(json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder))
+
+    return json_plots
