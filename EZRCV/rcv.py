@@ -142,7 +142,7 @@ def results(ballot_id):
     for record in voters:
         record.vote = [cand_dict[cand] for cand in record.vote.split(" ")]
 
-    json_plots = plot_rounds(rounds_df, round_num)
+    json_plots = plot_rounds(rounds_df, round_num, win_threshold)
 
     return render_template('results.html',
                            result=result, records=voters, ballot_opts=ballot_opts, json_plots=json_plots)
@@ -154,11 +154,14 @@ def extract_round_data(cand_pts, rounds_df, round_num):
                                                                     for cand_id in rounds_df['Candidate IDs']]
 
 
-def plot_rounds(rounds_df, round_count):
+def plot_rounds(rounds_df, round_count, win_threshold):
     json_plots = []
     max_votes = rounds_df['Round ' + str(round_count) + ' First-Choice Votes'].max()
     for i in range(1, round_count + 1):
         fig = px.bar(rounds_df, x='Candidate Name', y='Round ' + str(i) + ' First-Choice Votes')
+
+        fig.add_hline(y=win_threshold, line_dash="dash", line_color="red", annotation_text="Win Threshold",
+                      annotation_position="top left")
         fig = fig.update_layout(yaxis_tickmode='linear', yaxis_range=[0, max_votes])
 
         json_plots.append(json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder))
