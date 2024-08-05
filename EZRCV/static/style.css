@@ -121,6 +121,11 @@ button:hover {
     background-size: 100% 100%;
 }
 
+.sidebar-btn:disabled,
+.sidebar-btn[disabled] {
+    filter: grayscale(65%);
+}
+
 .entries-title-div {
     width: fit-content;
     margin-left: auto;
@@ -157,6 +162,23 @@ button:hover {
 }
 
 /* vote.html */
+
+.input-name {
+    margin-left: 7rem;
+    padding: 1rem 2rem 1.5rem 1rem;
+    border-radius: 1rem;
+    display: flex;
+    width: fit-content;
+    background-color: var(--brown);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+.input-name label {
+    color: var(--orange);
+    font-family: monospace;
+    font-size: 1.3rem;
+}
 
 .btn-vote-submit {
     margin-left: 7rem;
@@ -266,7 +288,9 @@ button:hover {
 
 .record-voter-name {
     display: inline-block;
-    width: 4rem;
+    text-wrap: wrap;
+    overflow-wrap: break-word;
+    width: 7rem;
     font-family: monospace;
     color: var(--brown);
 }

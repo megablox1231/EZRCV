@@ -26,7 +26,7 @@
             <button type="button" class="sidebar-btn" onclick="newEntry()" style="margin-top: 7rem">
                 <p style="transform: scaleX(-1);">Add</p>
             </button>
-            <button type="submit" class="sidebar-btn" style="margin-top: 14rem">
+            <button disabled type="submit" autocomplete="off" class="sidebar-btn" id="submitBtn" style="margin-top: 14rem">
                 <p style="transform: scaleX(-1);">Submit</p>
             </button>
             <!-- Options -->
@@ -40,10 +40,15 @@
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="flexCheckDefault" name="display_records">
                     <label class="form-check-label" style="color: var(--cream); font-family: monospace;" for="flexCheckDefault">
-                        Display ballot records on results
+                        Display Ballot Records On Results
                     </label>
                 </div>
-
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="nameCheck" name="allow_name">
+                    <label class="form-check-label" style="color: var(--cream); font-family: monospace;" for="nameCheck">
+                        Allow Optional Voter Name
+                    </label>
+                </div>
             </div>
             <!-- Ballot Entries Title -->
             <div class="entries-title-div">

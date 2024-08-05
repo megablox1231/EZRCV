@@ -31,9 +31,10 @@ def create_ballot():
     if request.method == "POST":
         name = request.form['name']
         display_records = 'display_records' in request.form
+        allow_name = 'allow_name' in request.form
         entries = request.form.getlist('entries')
 
-        ballot = Ballot(name=name, display_records=display_records)
+        ballot = Ballot(name=name, display_records=display_records, allow_name=allow_name)
         db.session.add(ballot)
         db.session.flush()
         for entry in entries:
@@ -55,8 +56,11 @@ def create_ballot_success(ballot_id):
 def vote(ballot_id):
     if request.method == "POST":
         entry_ids = request.form.getlist('entry_ids')
+        name = request.form.get('voter_name', 'Anon')
+        if name == '':
+            name = 'Anon'
         rankings = " ".join(entry_id for entry_id in entry_ids)
-        db.session.add(Voter(ballot_id=ballot_id, vote=rankings))
+        db.session.add(Voter(ballot_id=ballot_id, name=name, vote=rankings))
         db.session.commit()
 
         return redirect(url_for('rcv.vote_success', ballot_id=ballot_id))

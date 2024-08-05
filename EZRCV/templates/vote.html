@@ -16,10 +16,21 @@
 {% block content %}
 <h1 class="mt-5" style="margin-left: 7rem; color: var(--brown); font-weight: bold; font-family: monospace;">{{ ballot.name }}</h1>
 <form method="post">
+    {% if ballot.allow_name %}
+        <div class="input-name align-items-center">
+            <div class="col-auto">
+                <label for="nameInput" class="me-3">Your Name</label>
+            </div>
+            <div class="col-auto">
+                <input type="text" class="form-control" id="nameInput" name="voter_name" maxlength="20" placeholder="Name">
+            </div>
+        </div>
+    {% endif %}
     <button class="btn-vote-submit mt-4 col-auto" type="submit">Submit</button>
     <a class="mt-4 col-auto" href="{{ url_for('rcv.index') }}">
         <button class="btn-vote-home" type="button">Home</button>
     </a>
+
     <div style="justify-content: center; display: flex;">
         <ul class="sortable-list mt-1">
             {% for entry in entries %}

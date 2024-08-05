@@ -4,7 +4,7 @@ var parent = document.getElementById("recordHolder");
 function newRecord() {
     let record = origRecord.cloneNode(true);
     record.style.display = "block";
-    record.getElementsByTagName("input")[0].name = "entries"
+    record.getElementsByTagName("input")[0].name = "entries";
     parent.insertBefore(record, origRecord);
 }
 

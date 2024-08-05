@@ -50,7 +50,7 @@
                 <div class="accordion-body" id="recordHolder">
                     {% for record in records %}
                     <div class="mb-2 bal-record">
-                        <p class="record-voter-name">{{ record.id }}</p>
+                        <p class="record-voter-name">{{ record.name }}</p>
                         <div class="record-end"></div>
                         {%- for candidate in record.vote -%}
                         <div style="display:inline-flex">
