@@ -1,5 +1,5 @@
 from flask import (
-    Blueprint, redirect, render_template, request, url_for
+    Blueprint, redirect, render_template, request, url_for, flash
 )
 from EZRCV import db
 import sqlalchemy as sa
@@ -19,9 +19,18 @@ bp = Blueprint('rcv', __name__)
 def index():
     if request.method == 'POST':
         if 'vote' in request.form:
-            return redirect(url_for('rcv.vote', ballot_id=request.form['voteCode']))
+            if request.form['voteCode'].isnumeric() and db.session.get(Ballot, request.form['voteCode']) is not None:
+                return redirect(url_for('rcv.vote', ballot_id=request.form['voteCode']))
+            else:
+                flash("Vote short code does not exist!")
+                return redirect((url_for('index')))
         elif 'results' in request.form:
-            return redirect(url_for('rcv.results', ballot_id=request.form['resultsCode']))
+            if (request.form['resultsCode'].isnumeric()
+                    and db.session.get(Ballot, request.form['resultsCode']) is not None):
+                return redirect(url_for('rcv.results', ballot_id=request.form['resultsCode']))
+            else:
+                flash("Results short code does not exist!")
+                return redirect(url_for('index'))
 
     return render_template('index.html')
 

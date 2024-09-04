@@ -28,7 +28,7 @@
                     <div class="row option-main">
                         <label for="voteCode" class="col-auto pe-0 align-self-center" style="font-size: 2.2rem; color: var(--cream); font-family: monospace;">Vote</label>
                         <div class="col-auto align-self-center">
-                            <input type="text" class="form-control" id="voteCode" name="voteCode" placeholder="Short Code" required>
+                            <input type="number" class="form-control" id="voteCode" name="voteCode" placeholder="Short Code" required>
                         </div>
                         <div class="col-auto align-self-center">
                             <button type="submit" name="vote" class="btn btn-primary" style="background-color: var(--blue); border: none;" onclick="">Submit</button>
@@ -39,7 +39,7 @@
                     <div class="row option-main">
                         <label for="resultsCode" class="col-auto pe-0 align-self-center" style="font-size: 2.2rem; color: var(--cream);">Results</label>
                         <div class="col-auto align-self-center">
-                            <input type="text" class="form-control" id="resultsCode" name="resultsCode" placeholder="Short Code" required>
+                            <input type="number" class="form-control" id="resultsCode" name="resultsCode" placeholder="Short Code" required>
                         </div>
                         <div class="col-auto align-self-center">
                             <button type="submit" name="results" class="btn btn-primary ms-0" style="background-color: var(--blue); border: none;" onclick="">Submit</button>
@@ -47,6 +47,22 @@
                     </div>
                 </form>
             </div>
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            {% for message in messages %}
+            <div class="toast-container p-5 bottom-0 start-50 translate-middle-x mt-4">
+                <div class="toast show align-items-center" id="alert" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            {{ message }}
+                        </div>
+                        <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
         </div>
     </div>
 {% endblock %}
