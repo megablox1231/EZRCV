@@ -20,13 +20,11 @@ class Entry(db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
     ballot_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(Ballot.id))
     name: so.Mapped[str] = so.mapped_column(sa.String(64))
-    # TODO: remove votes
-    votes: so.Mapped[int] = so.mapped_column(sa.INT, default=0)
 
     ballot: so.Mapped[Ballot] = so.relationship(back_populates='entries')
 
     def __repr__(self):
-        return '<Entry {}: Name({}), votes({})>'.format(self.id, self.name, self.votes)
+        return '<Entry {}: Name({}), BallotID({})>'.format(self.id, self.name, self.ballot_id)
 
 
 class Voter(db.Model):

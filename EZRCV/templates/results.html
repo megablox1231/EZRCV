@@ -23,7 +23,7 @@
 
     <!-- Vote Total Bar Graph -->
     {% if json_plots %}
-    <h1>Round by Round Results</h1>
+    <h1 class="mt-5">Round by Round Results</h1>
     {% for plot in json_plots %}
         <input class="btn-check" type="radio" name="options-base" id="option{{ loop.index }}" autocomplete="off" onclick="select_plot({{plot}})" {{ "checked" if loop.index == 1 }}/>
         <label class="btn mt-2" for="option{{ loop.index }}">Round {{ loop.index }}</label>

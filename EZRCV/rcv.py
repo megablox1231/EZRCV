@@ -175,7 +175,11 @@ def plot_rounds(rounds_df, round_count, win_threshold):
 
         fig.add_hline(y=win_threshold, line_dash="dash", line_color="red", annotation_text="Win Threshold",
                       annotation_position="top left")
-        fig = fig.update_layout(yaxis_tickmode='linear', yaxis_range=[0, max_votes])
+        fig = fig.update_layout(yaxis_tickmode='linear', yaxis_range=[0, max_votes+0.5], paper_bgcolor="rgba(0,0,0,0)",
+                                font=dict(size=15))
+
+        fig.update_xaxes(showline=True, linewidth=2, linecolor='black')
+        fig.update_yaxes(showline=True, linewidth=2, linecolor='black')
 
         json_plots.append(json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder))
 

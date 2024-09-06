@@ -26,7 +26,7 @@
                 </a>
                 <form name="vote" method="post">
                     <div class="row option-main">
-                        <label for="voteCode" class="col-auto pe-0 align-self-center" style="font-size: 2.2rem; color: var(--cream); font-family: monospace;">Vote</label>
+                        <label for="voteCode" class="col-auto pe-0 align-self-center" style="font-size: 2.1rem; color: var(--cream); font-family: monospace;">Vote</label>
                         <div class="col-auto align-self-center">
                             <input type="number" class="form-control" id="voteCode" name="voteCode" placeholder="Short Code" required>
                         </div>
@@ -37,16 +37,17 @@
                 </form>
                 <form method="post">
                     <div class="row option-main">
-                        <label for="resultsCode" class="col-auto pe-0 align-self-center" style="font-size: 2.2rem; color: var(--cream);">Results</label>
+                        <label for="resultsCode" class="col-auto pe-0 align-self-center" style="font-size: 2.1rem; color: var(--cream);">Results</label>
                         <div class="col-auto align-self-center">
                             <input type="number" class="form-control" id="resultsCode" name="resultsCode" placeholder="Short Code" required>
                         </div>
                         <div class="col-auto align-self-center">
-                            <button type="submit" name="results" class="btn btn-primary ms-0" style="background-color: var(--blue); border: none;" onclick="">Submit</button>
+                            <button type="submit" name="results" class="btn btn-primary" style="background-color: var(--blue); border: none;" onclick="">Submit</button>
                         </div>
                     </div>
                 </form>
             </div>
+
             {% with messages = get_flashed_messages() %}
             {% if messages %}
             {% for message in messages %}
