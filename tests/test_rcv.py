@@ -38,8 +38,7 @@ def test_vote(client, app):
 
 def test_results_ballot_records(client):
     response = client.get('/1/results')
-
-    assert b'Al</p>' in response.data
+    assert b'Al</span>' in response.data
 
 
 def test_win_results(client):

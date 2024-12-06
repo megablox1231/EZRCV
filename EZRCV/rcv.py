@@ -1,13 +1,12 @@
 from flask import (
     Blueprint, redirect, render_template, request, url_for, flash
 )
+
+from EZRCV import models
 from EZRCV import db
 import sqlalchemy as sa
 from EZRCV.models import Ballot, Entry, Voter
-from collections import deque
-import itertools
 
-import pandas as pd
 import plotly.express as px
 import plotly.utils
 import json
@@ -88,86 +87,22 @@ def vote_success(ballot_id):
 
 @bp.route('/<int:ballot_id>/results')
 def results(ballot_id):
-    """Returns a winner to the results template using the instant-runoff voting method. Optionally also displays
-    various ballot statistics."""
-    ballot_opts = db.session.scalar(sa.select(Ballot).where(Ballot.id == ballot_id))
+    """Returns the ballot results to the results template. Also passes on various ballot statistics."""
+    result = models.calculate_winners(ballot_id)
 
-    # rankings(votes) are stored as a list of deques with most preferred candidates on top
-    voters = db.session.scalars(sa.select(Voter).where(Voter.ballot_id == ballot_id)).fetchall()
-    rankings = [deque(int(entry) for entry in reversed(voter.vote.split(" "))) for voter in voters]
+    if len(result) == 1:
+        winner = 'No votes have been cast yet'
+        return render_template('results.html', result=winner, ballot_opts=result['ballot_opts'])
 
-    if len(rankings) == 0:
-        result = 'No votes have been cast yet'
-        return render_template('results.html', result=result, ballot_opts=ballot_opts)
+    result['result'] = ", ".join(result['result'])
+    json_plots = plot_rounds(result['rounds_df'], result['round_num'], result['win_threshold'])
 
-    win_threshold = len(rankings) / 2
-    # print(rankings)
-    # candidates points are stored as a dictionary of id keys and vote deque array values
-    # points are determined by the length of these arrays
-    cands = db.session.scalars(sa.select(Entry).where(Entry.ballot_id == ballot_id)).fetchall()
-    cand_pts = {cand.id: [] for cand in cands}
-    for ranking in rankings:
-        cand_pts[ranking.pop()].append(ranking)
-
-    rounds_df = pd.DataFrame({'Candidate IDs': [cand.id for cand in cands],
-                              'Candidate Name': [cand.name for cand in cands]})
-    round_num = 1
-
-    while True:
-        cand_results = list(cand_pts.items())
-        cand_results.sort(key=lambda tup: len(tup[1]), reverse=True)
-
-        extract_round_data(cand_pts, rounds_df, round_num)
-
-        if len(cand_results[0][1]) > win_threshold:
-            # the top candidate got more than 50% of the vote
-            result = db.session.scalar(sa.select(Entry.name).where(Entry.id == cand_results[0][0]))
-            break
-        else:
-            elim_threshold = len(cand_results[-1][1])
-            elim_count = 0
-
-            for cand in reversed(cand_results):
-                if len(cand[1]) > elim_threshold:
-                    break
-                elim_count += 1
-
-            if elim_count == len(cand_results):
-                # the remaining candidates have the same number of votes
-                # print('its a tie')
-                result_list = db.session.scalars(
-                    sa.select(Entry.name).where(Entry.id.in_(
-                        [cand[0] for cand in
-                         itertools.islice(cand_results, len(cand_results) - elim_count, len(cand_results))])))
-                result = ", ".join(result_list)
-                break
-            else:
-                for cand in itertools.islice(cand_results, len(cand_results) - elim_count, len(cand_results)):
-                    for ranking in cand_pts.pop(cand[0]):
-                        if ranking[-1] in cand_pts:
-                            cand_pts[ranking.pop()].append(ranking)
-        round_num += 1
-
-    # splitting record votes and replacing with cand names for use in html
-    cand_dict = {}
-    for cand in cands:
-        cand_dict[str(cand.id)] = cand.name
-    for record in voters:
-        record.vote = [cand_dict[cand] for cand in record.vote.split(" ")]
-
-    json_plots = plot_rounds(rounds_df, round_num, win_threshold)
-
-    return render_template('results.html',
-                           result=result, records=voters, ballot_opts=ballot_opts, json_plots=json_plots)
-
-
-def extract_round_data(cand_pts, rounds_df, round_num):
-    """Along with candidate name and ID, rounds_df adds a column for each round's first-choice vote totals."""
-    rounds_df['Round ' + str(round_num) + ' First-Choice Votes'] = [len(cand_pts.get(cand_id, []))
-                                                                    for cand_id in rounds_df['Candidate IDs']]
+    return render_template('results.html', result=result['result'],
+                           records=result['voters'], ballot_opts=result['ballot_opts'], json_plots=json_plots)
 
 
 def plot_rounds(rounds_df, round_count, win_threshold):
+    """Plots the results of each round of instant-runoff voting as plotly bar charts encoded to JSON."""
     json_plots = []
     max_votes = rounds_df['Round ' + str(round_count) + ' First-Choice Votes'].max()
     for i in range(1, round_count + 1):

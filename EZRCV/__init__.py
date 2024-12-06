@@ -45,4 +45,7 @@ def create_app(test_config=None):
     app.register_blueprint(rcv.bp)
     app.add_url_rule('/', endpoint='index')
 
+    from . import api
+    app.register_blueprint(api.bp, url_prefix='/api')
+
     return app
